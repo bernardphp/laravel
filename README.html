@@ -1,0 +1,202 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+        <title>README</title>
+        <style>
+        @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Source+Code+Pro:400,700|Sorts+Mill+Goudy:400,400italic,700);
+        * { font-family: "Sorts Mill Goudy", sans-serif; color: #333; }
+        pre, code { color: #888; font-size: 0.8em; font-family: "Source Code Pro", monospace; }
+        .syntaxhighlighter code { padding: auto; border: 0; color: auto; background: transparent; padding: 0;}
+        .syntaxhighlighter .line { line-height: 16px }
+        .syntaxhighlighter { padding: 10px;}
+        h1 { font-size: 40px; font-weight: bold }
+        h2 { font-size: 30px; font-weight: bold }
+        h2:before { content: '> '; color: #ccc; }
+        h3 { font-size: 25px; font-weight: bold }
+        h3:before { content: '>> '; color: #ccc; }
+        h4 { font-size: 20px }
+        h4:before { content: '>>> '; color: #ccc; }
+        h5 { font-size: 15px }
+        h5:before { content: '>>>> '; color: #ccc; }
+        a { color: blue;}
+        #main { width: 800px; padding-left: 20px; }
+        table {
+            border-collapse: collapse;
+        }
+        table td {
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
+            padding: 5px;
+        }
+        table td:last-child {
+            border-right: 0;
+        }
+        table tr:nth-child(even) {
+            background: #eee;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="main">
+<!-- -------------------- //-->
+
+<h1>Laravel Bernard Service Provider</h1>
+
+<p>Brings Bernard to Laravel. Laravel already has a great queue.. That's right, but it only works with Laravel. If your project/company utilizes multiple frameworks, Bernard provides leverage.</p>
+
+<h2>Install &amp; Setup</h2>
+
+<p>
+	Extend <code>composer.json</code> file:
+</p>
+
+<pre><code>{
+    "require": {
+        "bernard/laravel": "@dev"
+    }
+}
+</code></pre>
+
+<p>Register the service provider in <code>app/config/app.php</code>:</p>
+
+<pre><code>// ...
+'aliases' =&gt; array(
+    // ..
+
+    'Bernard\Laravel\BernardServiceProvider'
+
+    // ..
+)
+</code></pre>
+
+<h2>Choose Driver</h2>
+
+<p>Now you need to choose the Driver you want to use. Initialize the default config file with <code>artisan</code>:</p>
+
+<pre><code>php artisan config:publish bernard/laravel
+</code></pre>
+
+<p>This creates the file <code>app/config/packages/bernard/laravel/config.php</code>.</p>
+
+<h3>Redis</h3>
+
+<p>Config in <code>app/config/packages/bernard/laravel/config.php</code></p>
+
+<pre><code>&lt;?php
+
+return array(
+    'driver' =&gt; 'predis',
+);
+</code></pre>
+
+<p>Setup <code>predis</code> in IoC:</p>
+
+<pre><code>&lt;?php
+
+App::singleton('predis', function () {
+    return new \Predis\Client(null, array(
+        'prefix' =&gt; 'bernard:'
+    ));
+});
+</code></pre>
+
+<h3>SQS</h3>
+
+<p>Config in <code>app/config/packages/bernard/laravel/config.php</code></p>
+
+<pre><code>&lt;?php
+
+return array(
+    'driver' =&gt; 'sqs',
+
+    // optional: use prefetching for efficiency
+    //'prefetch' =&gt; 10,
+
+    // optional: pre-set queue name -&gt; url mappings
+    //'queue_urls' =&gt; array('some-queue' =&gt; 'https://sqs.eu-west-1.amazonaws.com/123123/some-queue', ...)
+);
+</code></pre>
+
+<p>Setup <code>sqs</code> in IoC:</p>
+
+<pre><code>&lt;?php
+
+use Aws\Sqs\SqsClient;
+
+// ...
+
+App::singleton('sqs', function () {
+    return SqsClient::factory(array(
+       'key'    =&gt; 'Your AWS Access Key',
+       'secret' =&gt; 'Your AWS Secret Key',
+       'region' =&gt; 'Your AWS Region'
+   ));
+});
+</code></pre>
+
+<h3>Iron MQ</h3>
+
+<p>Config in <code>app/config/packages/bernard/laravel/config.php</code></p>
+
+<pre><code>&lt;?php
+
+return array(
+    'driver' =&gt; 'iron_mq',
+
+    // use prefetching for efficiency
+    //'prefetch' =&gt; 10
+);
+</code></pre>
+
+<p>Setup <code>iron_mq</code> in IoC:</p>
+
+<pre><code>&lt;?php
+
+App::singleton('iron_mq', function () {
+    return new \IronMq(array(
+        'token'      =&gt; 'Your IronMQ Token',
+        'project_id' =&gt; 'Your IronMQ Project ID',
+    ));
+});
+</code></pre>
+
+<h2>Usage</h2>
+
+<h3>In Laravel</h3>
+
+<p>In your Laravel app, add a new message to the queue:</p>
+
+<pre><code>$producer-&gt;produce(new \Bernard\Message\DefaultMessage('MyService', array(
+    'my' =&gt; 'args',
+)));
+</code></pre>
+
+<h3>From command line</h3>
+
+<pre><code># create a new message
+php artisan bernard:produce MyService '{"json":"data"}'
+
+# consume messages
+php artisan bernard:consume my-service
+</code></pre>
+
+
+<!-- -------------------- //-->
+        </div>
+        <link href="http://agorbatchev.typepad.com/pub/sh/3_0_83/styles/shThemeDjango.css" rel="stylesheet" type="text/css" />
+        <script src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shCore.js" type="text/javascript"></script>
+        <script src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shAutoloader.js" type="text/javascript"></script>
+        <script type="text/javascript">
+        SyntaxHighlighter.autoloader(
+            'php                        http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushPHP.js',
+            'bash shell                 http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushBash.js',
+            'js jscript javascript      http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushJScript.js',
+            'plain text                 http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushPlain.js',
+            'sql                        http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushSql.js'
+        );
+        SyntaxHighlighter.defaults.gutter = false;
+        SyntaxHighlighter.defaults.toolbar = false;
+        SyntaxHighlighter.all();
+        </script>
+    </body>
+</html>
