@@ -15,7 +15,7 @@ Extend `composer.json` file:
 Register the service provider in `app/config/app.php`:
 
     // ...
-    'aliases' => array(
+    'providers' => array(
         // ..
 
         'Bernard\Laravel\BernardServiceProvider'
@@ -52,6 +52,8 @@ Setup `predis` in IoC:
         ));
     });
 
+Requires the `predis/predis` composer package.
+
 ### SQS
 
 Config in `app/config/packages/bernard/laravel/config.php`
@@ -84,6 +86,8 @@ Setup `sqs` in IoC:
        ));
     });
 
+Requires the `aws/aws-sdk-php` composer package.
+
 ### Iron MQ
 
 Config in `app/config/packages/bernard/laravel/config.php`
@@ -108,6 +112,8 @@ Setup `iron_mq` in IoC:
             'project_id' => 'Your IronMQ Project ID',
         ));
     });
+
+Requires the `iron-io/iron_mq` composer package.
 
 ## Usage
 

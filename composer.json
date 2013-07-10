@@ -1,26 +1,25 @@
 {
     "name":        "bernard/laravel",
-    "description": "Service provider bringing the Bernard PHP Queue to Laravel 4",
+    "description": "Bernard bindings for Laravel",
     "authors": [
         {
-            "name":  "Ulrich Kautz",
+            "name": "Ulrich Kautz",
             "email": "ulrich.kautz@gmail.com"
         }
     ],
     "keywords": [
         "laravel",
+        "bernard",
         "queue",
         "worker",
-        "bernard",
-        "service-provider",
-        "serviceprovider"
+        "serviceprovider",
+        "service-provider"
     ],
     "require": {
         "php":                ">=5.3.0",
         "illuminate/support": "4.0.x",
-        "iron-io/iron_mq":    "@dev",
         "bernard/bernard":    "@dev",
-        "symfony/serializer": "@stable"
+        "symfony/serializer": "~2.3"
     },
     "require-dev": {
         "mockery/mockery": "@dev"
