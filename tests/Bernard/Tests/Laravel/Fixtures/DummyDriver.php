@@ -1,6 +1,6 @@
 <?php
 
-namespace Bernard\Laravel\Tests;
+namespace Bernard\Tests\Laravel\Fixtures;
 
 use Bernard\Driver;
 

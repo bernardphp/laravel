@@ -1,13 +1,8 @@
 <?php
 
-$autoload = null;
-foreach (array('..', '../..', '../../..', '../../../..') as $rel) {
-    $file = __DIR__. '/'. $rel. '/vendor/autoload.php';
-    if (is_file($file)) {
-        $autoload = include_once $file;
-    }
-}
+$loader = require __DIR__ . '/../vendor/autoload.php';
+$loader->add('Bernard\\Tests\\Laravel\\', __DIR__);
+$loader->register();
 
+require __DIR__ . '/Bernard/Tests/Laravel/Fixtures/app/bootstrap/autoload.php';
 
-$autoload->add('Bernard\\Laravel\\Tests\\', __DIR__. '/lib');
-$autoload->register();

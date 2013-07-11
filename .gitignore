@@ -1,4 +1,8 @@
-/vendor
-composer.phar
-composer.lock
 .DS_Store
+composer.lock
+phpunit.xml.dist
+
+vendor/
+tests/Bernard/Tests/Laravel/Fixtures/app/app/storage/*
+
+!.gitkeep

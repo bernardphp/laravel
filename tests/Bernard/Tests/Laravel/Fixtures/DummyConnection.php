@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Bernard\Laravel\Tests;
+namespace Bernard\Tests\Laravel\Fixtures;
 
 
 class DummyConnection {

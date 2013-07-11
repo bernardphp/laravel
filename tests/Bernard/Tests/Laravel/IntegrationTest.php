@@ -1,5 +1,9 @@
 <?php
 
+namespace Bernard\Tests\Laravel;
+
+use Bernard\Tests\Laravel\Fixtures;
+
 class IntegrationTest extends TestCase
 {
 
@@ -9,7 +13,7 @@ class IntegrationTest extends TestCase
 
         $this->app['config']['bernard::driver']   = \Mockery::mock('stdClass, \\Bernard\\Driver');
         $this->app['config']['bernard::services'] = array(
-            'Foo' => new \Bernard\Laravel\Tests\DummyService
+            'Foo' => new Fixtures\DummyService
         );
     }
 
