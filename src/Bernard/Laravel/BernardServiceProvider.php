@@ -108,7 +108,6 @@ class BernardServiceProvider extends ServiceProvider
         });
     }
 
-
     /**
      * Registers helper containers
      */
@@ -197,5 +196,4 @@ class BernardServiceProvider extends ServiceProvider
             'bernard.command.produce'
         );
     }
-
 }

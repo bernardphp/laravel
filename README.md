@@ -127,15 +127,35 @@ Setup `iron_mq` in IoC:
 
 Requires the `iron-io/iron_mq` composer package.
 
-## Usage
+Usage
+-----
 
-### In Laravel
+### In Laravel without Facades
 
 In your Laravel app, add a new message to the queue:
 
     $this->app['bernard:producer']->produce(new \Bernard\Message\DefaultMessage('MyService', array(
         'my' => 'args',
     )));
+
+### In Laravel with Facades
+
+Add the two aliases in your `app/config/app.php` config file like so:
+
+``` php
+<?php
+
+return array(
+    // ..
+    'aliases' => array(
+        // ..
+        'Producer' => 'Bernard\Laravel\Facades\Producer',
+        'Consumer' => 'Bernard\Laravel\Facades\Consumer',
+    ),
+);
+```
+
+And now you can use them as any other Facade in Laravel.
 
 ### From command line
 

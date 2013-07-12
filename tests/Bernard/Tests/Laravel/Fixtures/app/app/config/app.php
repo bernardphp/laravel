@@ -12,6 +12,8 @@ return array(
     ),
     'manifest' => storage_path().'/meta',
     'aliases' => array(
+        'Producer' => 'Bernard\Laravel\Facades\Producer',
+        'Consumer' => 'Bernard\Laravel\Facades\Consumer',
     ),
 
 );
