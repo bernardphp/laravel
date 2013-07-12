@@ -1,33 +1,45 @@
-# Laravel Bernard Service Provider
+Bernard for Laravel
+===================
+
+[![Build Status](https://travis-ci.org/bernardphp/laravel.png?branch=master)](https://travis-ci.org/bernardphp/laravel)
 
 Brings Bernard to Laravel. Laravel already has a great queue.. That's right, but it only works with Laravel. If your project/company utilizes multiple frameworks, Bernard provides leverage.
 
-## Install & Setup
+Getting started
+---------------
 
 Extend `composer.json` file:
 
-    {
-        "require": {
-            "bernard/laravel": "@dev"
-        }
+``` json
+{
+    "require": {
+        "bernard/laravel": "@dev"
     }
+}
+```
 
 Register the service provider in `app/config/app.php`:
 
-    // ...
-    'providers' => array(
-        // ..
+``` php
+<?php
+// ...
+'providers' => array(
+    // ..
 
-        'Bernard\Laravel\BernardServiceProvider'
+    'Bernard\Laravel\BernardServiceProvider'
 
-        // ..
-    )
+    // ..
+)
+```
 
-## Choose Driver
+Choose Driver
+-------------
 
 Now you need to choose the Driver you want to use. Initialize the default config file with `artisan`:
 
-    php artisan config:publish bernard/laravel
+``` bash
+$ php artisan config:publish bernard/laravel
+```
 
 This creates the file `app/config/packages/bernard/laravel/config.php`.
 
