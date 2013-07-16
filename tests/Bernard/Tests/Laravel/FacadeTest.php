@@ -30,4 +30,16 @@ class FacadeTest extends TestCase
 
         \Consumer::consume($queue);
     }
+
+    public function testProducerFacadeCreate()
+    {
+        $message = new DefaultMessage('SendNewsletter', array('a' => 'b'));
+
+        $mock = $this->getMockBuilder('Bernard\Producer')->disableOriginalConstructor()->getMock();
+        $mock->expects($this->once())->method('produce')->with($message);
+
+        $this->app['bernard:producer'] = $mock;
+
+        \Producer::create('SendNewsletter', array('a' => 'b'));
+    }
 }
