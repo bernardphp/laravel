@@ -2,8 +2,6 @@
 
 namespace Bernard\Laravel\Facades;
 
-use Bernard\Message\DefaultMessage;
-
 /**
  * @package Bernard
  */
@@ -18,13 +16,14 @@ class Producer extends \Illuminate\Support\Facades\Facade
     }
 
     /**
-     * Create a new default message
+     * Create a new message in the queue
      *
-     * @param string $name       Name of the message
-     * @param array  $parameters Parameters for the message
+     * @param string $name         Name of the message
+     * @param array  $parameters   Optional parameters for the message
+     * @param string $messageClass Optional class of the message. Defaults to \Bernard\Message\DefaultMessage
      */
-    public static function create($name, array $parameters = array())
+    public static function message($name, array $parameters = array(), $messageClass = '\\Bernard\\Message\\DefaultMessage')
     {
-        self::produce(new DefaultMessage($name, $parameters));
+        self::produce(new $messageClass($name, $parameters));
     }
 }

@@ -40,6 +40,6 @@ class FacadeTest extends TestCase
 
         $this->app['bernard:producer'] = $mock;
 
-        \Producer::create('SendNewsletter', array('a' => 'b'));
+        \Producer::message('SendNewsletter', array('a' => 'b'));
     }
 }

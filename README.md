@@ -48,21 +48,25 @@ This creates the file `app/config/packages/bernard/laravel/config.php`.
 
 Config in `app/config/packages/bernard/laravel/config.php`
 
-    <?php
+``` php
+<?php
 
-    return array(
-        'driver' => 'predis',
-    );
+return array(
+    'driver' => 'predis',
+);
+```
 
 Setup `predis` in IoC:
 
-    <?php
+``` php
+<?php
 
-    App::singleton('predis', function () {
-        return new \Predis\Client(null, array(
-            'prefix' => 'bernard:'
-        ));
-    });
+App::singleton('predis', function () {
+    return new \Predis\Client(null, array(
+        'prefix' => 'bernard:'
+    ));
+});
+```
 
 Requires the `predis/predis` composer package.
 
@@ -70,33 +74,37 @@ Requires the `predis/predis` composer package.
 
 Config in `app/config/packages/bernard/laravel/config.php`
 
-    <?php
+``` php
+<?php
 
-    return array(
-        'driver' => 'sqs',
+return array(
+    'driver' => 'sqs',
 
-        // optional: use prefetching for efficiency
-        //'prefetch' => 10,
+    // optional: use prefetching for efficiency
+    //'prefetch' => 10,
 
-        // optional: pre-set queue name -> url mappings
-        //'queue_urls' => array('some-queue' => 'https://sqs.eu-west-1.amazonaws.com/123123/some-queue', ...)
-    );
+    // optional: pre-set queue name -> url mappings
+    //'queue_urls' => array('some-queue' => 'https://sqs.eu-west-1.amazonaws.com/123123/some-queue', ...)
+);
+```
 
 Setup `sqs` in IoC:
 
-    <?php
+``` php
+<?php
 
-    use Aws\Sqs\SqsClient;
+use Aws\Sqs\SqsClient;
 
-    // ...
+// ...
 
-    App::singleton('sqs', function () {
-        return SqsClient::factory(array(
-           'key'    => 'Your AWS Access Key',
-           'secret' => 'Your AWS Secret Key',
-           'region' => 'Your AWS Region'
-       ));
-    });
+App::singleton('sqs', function () {
+    return SqsClient::factory(array(
+       'key'    => 'Your AWS Access Key',
+       'secret' => 'Your AWS Secret Key',
+       'region' => 'Your AWS Region'
+   ));
+});
+```
 
 Requires the `aws/aws-sdk-php` composer package.
 
@@ -104,26 +112,30 @@ Requires the `aws/aws-sdk-php` composer package.
 
 Config in `app/config/packages/bernard/laravel/config.php`
 
-    <?php
+``` php
+<?php
 
-    return array(
-        'driver' => 'iron_mq',
+return array(
+    'driver' => 'iron_mq',
 
-        // use prefetching for efficiency
-        //'prefetch' => 10
-    );
+    // use prefetching for efficiency
+    //'prefetch' => 10
+);
+```
 
 
 Setup `iron_mq` in IoC:
 
-    <?php
+``` php
+<?php
 
-    App::singleton('iron_mq', function () {
-        return new \IronMq(array(
-            'token'      => 'Your IronMQ Token',
-            'project_id' => 'Your IronMQ Project ID',
-        ));
-    });
+App::singleton('iron_mq', function () {
+    return new \IronMq(array(
+        'token'      => 'Your IronMQ Token',
+        'project_id' => 'Your IronMQ Project ID',
+    ));
+});
+```
 
 Requires the `iron-io/iron_mq` composer package.
 
@@ -134,9 +146,13 @@ Usage
 
 In your Laravel app, add a new message to the queue:
 
-    $this->app['bernard:producer']->produce(new \Bernard\Message\DefaultMessage('MyService', array(
-        'my' => 'args',
-    )));
+``` php
+<?php
+
+$this->app['bernard:producer']->produce(new \Bernard\Message\DefaultMessage('MyService', array(
+    'my' => 'args',
+)));
+```
 
 ### In Laravel with Facades
 
@@ -155,13 +171,20 @@ return array(
 );
 ```
 
-And now you can use them as any other Facade in Laravel.
+And now you can use them as any other Facade in Laravel:
+
+``` php
+<?php
+
+Producer::message('MyService', array('my' => 'args'));
+```
 
 ### From command line
 
-    # create a new message
-    php artisan bernard:produce MyService '{"json":"data"}'
+``` bash
+# create a new message
+$ php artisan bernard:produce MyService '{"json":"data"}'
 
-    # consume messages
-    php artisan bernard:consume my-service
-
+# consume messages
+$ php artisan bernard:consume my-service
+```
