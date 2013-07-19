@@ -37,6 +37,7 @@ class BernardServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerDrivers();
+        $this->registerSerializers();
         $this->registerHelpers();
         $this->registerCommands();
     }
@@ -108,24 +109,34 @@ class BernardServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Registers helper containers
-     */
-    protected function registerHelpers()
+    protected function registerSerializers()
     {
+        $this->app['bernard.serializer'] = $this->app->share(function ($app) {
+            $serializer = $app['config']['bernard::serializer'] ?: 'naive';
+
+            if (is_object($serializer)) {
+                return $serializer;
+            }
+
+            return $app['bernard.serializer.' . $serializer];
+        });
+
+        $this->app['bernard.serializer.naive'] = $this->app->share(function ($app) {
+            return new \Bernard\Serializer\NaiveSerializer;
+        });
 
         // serializer
-        $this->app['bernard.serializer'] = $this->app->share(function ($app) {
+        $this->app['bernard.serializer.symfony'] = $this->app->share(function ($app) {
+            $normalizers = array(
+                new \Bernard\Symfony\EnvelopeNormalizer,
+                new \Bernard\Symfony\DefaultMessageNormalizer
+            );
 
-            // list of normalizers
-            $normalizers = isset($app['config']['bernard::normalizers'])
-                ? array_map(function ($class) {
+            if (isset($app['config']['bernard::normalizers'])) {
+                $normalizers = array_map(function ($class) {
                     return is_object($class) ? $class : new $class;
-                }, (array) $app['config']['bernard::normalizers'])
-                : array(
-                    new \Bernard\Symfony\EnvelopeNormalizer,
-                    new \Bernard\Symfony\DefaultMessageNormalizer
-                );
+                }, (array) $app['config']['bernard::normalizers']);
+            }
 
             // the serializer class
             $serializerClass = isset($app['config']['bernard::serializer'])
@@ -143,7 +154,13 @@ class BernardServiceProvider extends ServiceProvider
                 new Serializer($normalizers, $encoders)
             );
         });
+    }
 
+    /**
+     * Registers helper containers
+     */
+    protected function registerHelpers()
+    {
         // actual driver
         $this->app['bernard.driver'] = $this->app->share(function ($app) {
             $driver = $app['config']['bernard::driver'];

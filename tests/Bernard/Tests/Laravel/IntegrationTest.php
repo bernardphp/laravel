@@ -19,12 +19,17 @@ class IntegrationTest extends TestCase
 
     public function testSerializerContainerIsAvailable()
     {
-        $this->assertContains('Bernard\Serializer', class_implements(get_class($this->app['bernard.serializer'])));
+        $this->assertInstanceOf('Bernard\Serializer', $this->app['bernard.serializer']);
     }
 
     public function testDriverContainerIsAvailable()
     {
-        $this->assertContains('Bernard\Driver', class_implements(get_class($this->app['bernard.driver'])));
+        $this->assertInstanceOf('Bernard\Driver', $this->app['bernard.driver']);
+    }
+
+    public function testDefaultSerializer()
+    {
+        $this->assertInstanceOf('Bernard\Serializer\NaiveSerializer', $this->app['bernard.serializer']);
     }
 
     public function testCheckSqsDriverContainer()
