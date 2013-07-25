@@ -34,7 +34,7 @@
             "src/migrations"
         ],
         "psr-0": {
-            "Bernard\\Laravel\\": "src/"
+            "Bernard\\Laravel": "src/"
         }
     }
 }
