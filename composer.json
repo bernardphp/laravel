@@ -31,7 +31,6 @@
 
     "autoload": {
         "classmap": [
-            "src/Bernard/Laravel/Model",
             "src/migrations"
         ],
         "psr-0": {

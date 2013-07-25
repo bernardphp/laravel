@@ -45,12 +45,6 @@ class EloquentDriver implements \Bernard\Driver
                 throw $e;
             }
         }
-        /*try {
-            $this->connection->insert('bernard_queues', array('name' => $queueName));
-        } catch (\Exception $e) {
-            // Because SQL server does not support a portable INSERT ON IGNORE syntax
-            // this ignores error based on primary key.
-        }*/
     }
 
     /**
@@ -59,9 +53,6 @@ class EloquentDriver implements \Bernard\Driver
     public function countMessages($queueName)
     {
         return BernardMessage::where('queue', '=', $queueName)->count();
-        /*return $this->connection->fetchColumn('SELECT COUNT(id) FROM bernard_messages WHERE queue = :queue', array(
-            'queue' => $queueName,
-        ));*/
     }
 
     /**
@@ -76,16 +67,6 @@ class EloquentDriver implements \Bernard\Driver
         $msg->visible = true;
         $msg->send_at = new \DateTime();
         $msg->save();
-
-        /*$types = array('string', 'string', 'datetime');
-        $data = array(
-            'queue'   => $queueName,
-            'message' => $message,
-            'sentAt'  => new \DateTime(),
-        );
-
-        $this->createQueue($queueName);
-        $this->connection->insert('bernard_messages', $data, $types);*/
     }
 
     /**
@@ -114,32 +95,6 @@ class EloquentDriver implements \Bernard\Driver
             //sleep for 10 ms
             usleep(10000);
         }
-
-
-        /*$runtime = microtime(true) + $interval;
-        $query = 'SELECT id, message FROM bernard_messages
-                  WHERE queue = :queue AND visible = :visible
-                  ORDER BY sentAt, id ' . $this->connection->getDatabasePlatform()->getForUpdateSql();
-
-        while (microtime(true) < $runtime) {
-            $this->connection->beginTransaction();
-
-            try {
-                list($id, $message) = $this->connection->fetchArray($query, array('queue' => $queueName, 'visible' => true));
-
-                $this->connection->update('bernard_messages', array('visible' => false), compact('id'));
-                $this->connection->commit();
-            } catch (\Exception $e) {
-                $this->connection->rollback();
-            }
-
-            if (isset($message) && $message) {
-                return array($message, $id);
-            }
-
-            //sleep for 10 ms
-            usleep(10000);
-        }*/
     }
 
     /**
@@ -151,7 +106,6 @@ class EloquentDriver implements \Bernard\Driver
         if ($message) {
             $message->delete();
         }
-        /*$this->connection->delete('bernard_messages', array('id' => $receipt, 'queue' => $queueName));*/
     }
 
     /**
@@ -165,7 +119,7 @@ class EloquentDriver implements \Bernard\Driver
             ->skip($index)
             ->take($limit)
             ->get();
-        return $messages->count() ? array_pluck($messages->toArray(), 'message') : array();
+        return array_pluck($messages->toArray(), 'message');
     }
 
     /**
@@ -175,8 +129,6 @@ class EloquentDriver implements \Bernard\Driver
     {
         BernardMessage::where('queue', '=', $queueName)->delete();
         BernardQueue::where('name', '=', $queueName)->delete();
-        /*$this->connection->delete('bernard_messages', array('queue' => $queueName));
-        $this->connection->delete('bernard_queues', array('name' => $queueName));*/
     }
 
     /**
