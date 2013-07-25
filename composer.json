@@ -25,11 +25,15 @@
 
     "require-dev": {
         "illuminate/foundation" : "~4.0.0",
-        "mockery/mockery"       : "~0.7.0",
-        "symfony/serializer"    : "~2.3"
+        "orchestra/testbench"   : "~2.0.0",
+        "mockery/mockery"       : "~0.7.0"
     },
 
     "autoload": {
+        "classmap": [
+            "src/Bernard/Laravel/Model",
+            "src/migrations"
+        ],
         "psr-0": {
             "Bernard\\Laravel\\": "src/"
         }
