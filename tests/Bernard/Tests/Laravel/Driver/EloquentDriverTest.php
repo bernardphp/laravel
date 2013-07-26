@@ -115,7 +115,7 @@ class EloquentDriverTest extends \Orchestra\Testbench\TestCase
 
     public function testInfo()
     {
-        $this->assertInternalType('null', $this->driver->info());
+        $this->assertInternalType('array', $this->driver->info());
     }
 
     protected function prepareForTests()

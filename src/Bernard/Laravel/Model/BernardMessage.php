@@ -11,11 +11,10 @@
 namespace Bernard\Laravel\Model;
 
 /**
- * Queue model for bernard
+ * Message model for bernard
  *
  * @author Ulrich Kautz <ulrich.kautz@gmail.com>
  */
-
 class BernardMessage extends \Eloquent
 {
     protected $table = 'bernard_messages';

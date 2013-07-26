@@ -17,13 +17,6 @@ class EloquentDriver implements \Bernard\Driver
     /**
      * {@inheritDoc}
      */
-    public function __construct()
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function listQueues()
     {
         $queues = BernardQueue::all();
@@ -136,6 +129,6 @@ class EloquentDriver implements \Bernard\Driver
      */
     public function info()
     {
-        return null;
+        return array();
     }
 }

@@ -15,7 +15,6 @@ namespace Bernard\Laravel\Model;
  *
  * @author Ulrich Kautz <ulrich.kautz@gmail.com>
  */
-
 class BernardQueue extends \Eloquent
 {
     protected $table = 'bernard_queues';
