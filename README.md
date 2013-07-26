@@ -137,7 +137,25 @@ App::singleton('iron_mq', function () {
 });
 ```
 
-Requires the `iron-io/iron_mq` composer package.
+### Eloquent
+
+For small projects or testing.
+
+Config in `app/config/packages/bernard/laravel/config.php`
+
+``` php
+<?php
+
+return array(
+    'driver' => 'eloquent',
+);
+```
+
+You also need to migrate the required tables (once):
+
+``` bash
+$ php artisan migrate --package=bernard/laravel
+```
 
 Usage
 -----
