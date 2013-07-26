@@ -3,17 +3,31 @@
 namespace Bernard\Tests\Laravel\Driver;
 
 use Bernard\Laravel\Driver\EloquentDriver;
-use Bernard\Laravel\Model\BernardMessage;
-use Bernard\Laravel\Model\BernardQueue;
 
-//class EloquentDriverTest extends \Bernard\Tests\Laravel\TestCase
-class EloquentDriverTest extends \Orchestra\Testbench\TestCase
+class EloquentDriverTest extends \Bernard\Tests\Laravel\TestCase
 {
-
     public function setUp()
     {
         parent::setUp();
-        $this->prepareForTests();
+
+        $this->driver = new EloquentDriver();
+        $this->app['config']['database'] = array(
+            'fetch'       => \PDO::FETCH_CLASS,
+            'migrations'  => 'migrations',
+            'default'     => 'sqlite_memory',
+            'connections' => array(
+                'sqlite_memory' => array(
+                    'driver'    => 'sqlite',
+                    'database'  => ':memory:'
+                )
+            )
+        );
+
+        \Artisan::call('migrate', array(
+            '--package'  => 'bernard/laravel',
+            '--database' => 'sqlite_memory',
+            '--path'     => '../../../../../src/migrations/'
+        ));
     }
 
     public function testPopMessageWithInterval()
@@ -60,9 +74,6 @@ class EloquentDriverTest extends \Orchestra\Testbench\TestCase
     {
         $this->driver->pushMessage('send-newsletter', 'my-message-1');
         $this->driver->pushMessage('send-newsletter', 'my-message-2');
-
-        // make sure they are there
-        $this->assertEquals(2, $this->driver->countMessages('send-newsletter'));
 
         // peeking
         $this->assertEquals(array('my-message-1', 'my-message-2'), $this->driver->peekQueue('send-newsletter'));
@@ -115,27 +126,6 @@ class EloquentDriverTest extends \Orchestra\Testbench\TestCase
 
     public function testInfo()
     {
-        $this->assertInternalType('array', $this->driver->info());
-    }
-
-    protected function prepareForTests()
-    {
-        $this->app['config']['database'] = array(
-            'fetch'       => \PDO::FETCH_CLASS,
-            'migrations'  => 'migrations',
-            'default'     => 'sqlite_memory',
-            'connections' => array(
-                'sqlite_memory' => array(
-                    'driver'    => 'sqlite',
-                    'database'  => ':memory:'
-                )
-            )
-        );
-        $this->driver = new \Bernard\Laravel\Driver\EloquentDriver();
-        \Artisan::call('migrate', array(
-            '--package'  => 'bernard/laravel',
-            '--database' => 'sqlite_memory',
-            '--path'     => '../../../../../src/migrations/'
-        ));
+        $this->assertEquals(array(), $this->driver->info());
     }
 }
