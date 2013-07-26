@@ -87,6 +87,11 @@ class BernardServiceProvider extends ServiceProvider
             return new \Bernard\Driver\PredisDriver(is_object($connection) ? $connection : $app[$connection], $prefetch);
         });
 
+        // Eloquent
+        $this->app['bernard.driver.eloquent'] = $this->app->share(function ($app) {
+            return new \Bernard\Laravel\Driver\EloquentDriver();
+        });
+
         // Custom
         $this->app['bernard.driver.custom'] = $this->app->share(function ($app) {
 
