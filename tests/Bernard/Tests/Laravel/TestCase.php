@@ -2,20 +2,20 @@
 
 namespace Bernard\Tests\Laravel;
 
-class TestCase extends \Illuminate\Foundation\Testing\TestCase {
-
-    /**
-     * Creates the application.
-     *
-     * @return Symfony\Component\HttpKernel\HttpKernelInterface
-     */
-    public function createApplication()
+class TestCase extends \Orchestra\Testbench\TestCase
+{
+    protected function getPackageAliases()
     {
-        $unitTesting = true;
-
-        $testEnvironment = 'testing';
-
-        return require __DIR__.'/Fixtures/app/bootstrap/start.php';
+        return array(
+            'Producer' => 'Bernard\Laravel\Facades\Producer',
+            'Consumer' => 'Bernard\Laravel\Facades\Consumer',
+        );
     }
 
+    protected function getPackageProviders()
+    {
+        return array(
+            'Bernard\Laravel\BernardServiceProvider',
+        );
+    }
 }
