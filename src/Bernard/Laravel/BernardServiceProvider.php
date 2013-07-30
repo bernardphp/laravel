@@ -87,6 +87,12 @@ class BernardServiceProvider extends ServiceProvider
             return new \Bernard\Driver\PredisDriver(is_object($connection) ? $connection : $app[$connection], $prefetch);
         });
 
+        // Google App Engine
+        $this->app['bernard.driver.app_engine'] = $this->app->share(function ($app) {
+            $queueEndpoints = $app['config']['bernard::queue_endpoints'] ?: array();
+            return new \Bernard\Driver\AppEngineDriver($queueEndpoints);
+        });
+
         // Eloquent
         $this->app['bernard.driver.eloquent'] = $this->app->share(function ($app) {
             return new \Bernard\Laravel\Driver\EloquentDriver();
