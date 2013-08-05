@@ -59,6 +59,13 @@ class IntegrationTest extends TestCase
         $this->assertInstanceOf('Bernard\Driver\PredisDriver', $this->app['bernard.driver']);
     }
 
+    public function testCheckAppEngineDriverContainer()
+    {
+        $this->app['config']['bernard::driver'] = 'app_engine';
+        $this->app['config']['bernard::queue_endpoints'] = array('some-queue' => '/url_endpoint');
+        $this->assertInstanceOf('Bernard\Driver\AppEngineDriver', $this->app['bernard.driver']);
+    }
+
     public function testThatConsumerContainerIsThere()
     {
         $this->assertInstanceOf('Bernard\Consumer', $this->app['bernard.consumer']);
